@@ -60,3 +60,26 @@ width: 100%;
     margin: 10px;
     cursor: pointer;
 }
+
+.shimmer-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.shimmer-card {
+    box-sizing: border-box;
+        width: 200px;
+        height: 400px;
+        padding: 5px;
+        margin: 5px;
+        background-color: beige;
+}
+
+.login {
+    cursor: pointer;
+    padding: 0 20px;
+}
+
+.filter{
+    display: flex;
+}
