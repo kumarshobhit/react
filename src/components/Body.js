@@ -1,7 +1,8 @@
 import RestaurantCard from "./RestaurantCard";
 import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
-import restaurants from "../utils/mockData";
+import { Restaurants_URL } from "../utils/constants";
+import { Link } from "react-router-dom";
 
 const Body = () => {
   // State Variable - super powerful variable
@@ -14,9 +15,7 @@ const Body = () => {
   }, []);
 
   const fetchData = async () => {
-    const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=28.6386438&lng=77.07206&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-    );
+    const data = await fetch(Restaurants_URL);
     const json = await data.json();
     setRes(
       json?.data?.cards[4].card?.card?.gridElements?.infoWithStyle?.restaurants
@@ -24,12 +23,11 @@ const Body = () => {
     setFilterRes(
       json?.data?.cards[4].card?.card?.gridElements?.infoWithStyle?.restaurants
     );
-  };
-  // to add more restaurants
 
-  if (listOfRes.length == 0) {
-    return <Shimmer />;
-  }
+    if (listOfRes.length == 0) {
+      return <Shimmer />;
+    }
+  };
 
   //normal state variable
   return (
@@ -68,7 +66,9 @@ const Body = () => {
       </div>
       <div className='res-container'>
         {filterRes.map((res) => (
-          <RestaurantCard key={res.info.id} resObj={res} />
+          <Link key={res.info.id} to={"/restaurants/" + res.info.id}>
+            <RestaurantCard resObj={res} />
+          </Link>
         ))}
       </div>
     </div>
@@ -76,3 +76,23 @@ const Body = () => {
 };
 
 export default Body;
+
+// to add more restaurants
+//   const url = "https://www.swiggy.com/dapi/restaurants/list/update";
+//   const config = {
+//     method: "POST",
+//     headers: {
+//       Accept: "application/json",
+//       "Content-Type": "application/json",
+//       lat: 28.6386438,
+//       // lng: 77.07206,
+//     },
+//   };
+//   try {
+//     const response = await fetch(url, config);
+//     const jsonData = await response.json();
+//     console.log(jsonData);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
