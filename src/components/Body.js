@@ -1,33 +1,23 @@
 import RestaurantCard from "./RestaurantCard";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Shimmer from "./Shimmer";
-import { Restaurants_URL } from "../utils/constants";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
+import useRestaurants from "../utils/useRestaurants";
 
 const Body = () => {
   // State Variable - super powerful variable
-  const [listOfRes, setRes] = useState([]);
-  const [filterRes, setFilterRes] = useState([]);
+  const { listOfRes, filterRes } = useRestaurants();
   const [searchText, setSearchText] = useState("");
+  const onLineStatus = useOnlineStatus();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  if (!onLineStatus) {
+    return <h1>Looks that you are offline</h1>;
+  }
 
-  const fetchData = async () => {
-    const data = await fetch(Restaurants_URL);
-    const json = await data.json();
-    setRes(
-      json?.data?.cards[4].card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
-    setFilterRes(
-      json?.data?.cards[4].card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
-
-    if (listOfRes.length == 0) {
-      return <Shimmer />;
-    }
-  };
+  if (listOfRes.length == 0) {
+    return <Shimmer />;
+  }
 
   //normal state variable
   return (
